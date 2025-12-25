@@ -1,3 +1,3 @@
 szopd ki a seggem
 -----------------
-https://zsomborpados27-ux.github.io/szarr/
+https://zsomborpados27-ux.github.io/szarr/szarjatekhu.html
