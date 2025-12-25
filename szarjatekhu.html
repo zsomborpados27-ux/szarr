@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<title>Tesó Multiverzum V2</title>
+
+<style>
+body {
+    background: radial-gradient(circle at top, #111, #000);
+    color: #eee;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    overflow-x: hidden;
+}
+
+h1 {
+    animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 5px #f00; }
+    to { text-shadow: 0 0 20px #ff0; }
+}
+
+button {
+    padding: 10px 16px;
+    margin: 6px;
+    background: #222;
+    color: #fff;
+    border: 1px solid #444;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    transform: scale(1.1) rotate(-1deg);
+    background: #555;
+}
+
+.panel {
+    border: 1px solid #333;
+    padding: 15px;
+    margin: 15px auto;
+    width: 90%;
+    max-width: 600px;
+    background: rgba(20,20,20,0.9);
+    border-radius: 10px;
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-6px); }
+    100% { transform: translateY(0px); }
+}
+
+#log, #chat {
+    height: 160px;
+    overflow-y: auto;
+    background: #0a0a0a;
+    padding: 10px;
+    font-size: 14px;
+    text-align: left;
+    border-radius: 6px;
+}
+
+.shake { animation: shake 0.4s; }
+.spin { animation: spin 1s linear; }
+.flash { animation: flash 0.5s alternate 4; }
+
+@keyframes shake {
+    0% { transform: translate(0,0); }
+    25% { transform: translate(6px,0); }
+    50% { transform: translate(-6px,0); }
+    75% { transform: translate(6px,0); }
+    100% { transform: translate(0,0); }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes flash {
+    from { background:#111; }
+    to { background:#330000; }
+}
+
+.emoji {
+    position: fixed;
+    font-size: 24px;
+    animation: fall 4s linear forwards;
+}
+
+@keyframes fall {
+    from { top:-30px; opacity:1; }
+    to { top:110vh; opacity:0; }
+}
+</style>
+</head>
+
+<body>
+
+<h1>🔥 Tesó Multiverzum V2 🔥</h1>
+<p>Pénz: <span id="money">1000</span> 💸</p>
+
+<div class="panel">
+<h2>🎰 Slot</h2>
+<button onclick="slot()">Húzás</button>
+<div id="slotRes"></div>
+</div>
+
+<div class="panel">
+<h2>🎡 Kerék</h2>
+<button onclick="wheel()">Pörget</button>
+</div>
+
+<div class="panel">
+<h2>🍺 Kocsma</h2>
+<button onclick="drink()">Igyál</button>
+<p>Részegség: <span id="drunk">0</span>%</p>
+</div>
+
+<div class="panel">
+<h2>😡 Rage</h2>
+<button onclick="rage()">RAGE</button>
+</div>
+
+<div class="panel">
+<h2>📜 Log</h2>
+<div id="log"></div>
+</div>
+
+<div class="panel">
+<h2>💬 Fake Chat</h2>
+<div id="chat"></div>
+</div>
+
+<script>
+let money = 1000;
+let drunk = 0;
+
+const chatLines = [
+    "Bacsek: HOVA TÜNT 4 CIGIM?!",
+    "Gáspárné Szalczinger Mária 67: Is we deadass?",
+    "FülöpRita98: Szopd ki a seggem",
+    "Beróbá: Ki jön 1v1 Imagine logoban?",
+    "Konka: Is the green grass?",
+    "Szintén Bacsek: First bite oh my god Second bite oh hi god",
+    "HERbY: Oscarnak küldöm",
+    "Bturbo: A kurva anyád"
+];
+
+function log(msg) {
+    const l = document.getElementById("log");
+    l.innerHTML += msg + "<br>";
+    l.scrollTop = l.scrollHeight;
+}
+
+function chat(msg) {
+    const c = document.getElementById("chat");
+    c.innerHTML += msg + "<br>";
+    c.scrollTop = c.scrollHeight;
+}
+
+function updateMoney() {
+    document.getElementById("money").innerText = money;
+}
+
+function slot() {
+    spawnEmoji("🎰");
+    const win = Math.random() < 0.25;
+    if(win) {
+        money += 300;
+        log("Slot: most betalált.");
+        chat("SlotBot: szép húzás!");
+    } else {
+        money -= 100;
+        log("Slot: most nem jött.");
+        chat("SlotBot: majd legközelebb.");
+    }
+    updateMoney();
+}
+
+function wheel() {
+    document.body.classList.add("spin");
+    setTimeout(()=>document.body.classList.remove("spin"),1000);
+    const r = Math.floor(Math.random()*400)-200;
+    money += r;
+    log("Kerék: "+r);
+    chat("KerékBot: pörgött rendesen.");
+    updateMoney();
+    spawnEmoji("🎡");
+}
+
+function drink() {
+    drunk += Math.floor(Math.random()*15)+5;
+    if(drunk > 100) drunk = 100;
+    document.getElementById("drunk").innerText = drunk;
+    document.body.classList.add("flash");
+    setTimeout(()=>document.body.classList.remove("flash"),500);
+    log("Kocsma: csúszott egy ital.");
+    chat("Csapos: lassan igyál.");
+    spawnEmoji("🍺");
+}
+
+function rage() {
+    document.body.classList.add("shake");
+    setTimeout(()=>document.body.classList.remove("shake"),400);
+    log("RAGE: kiengedted.");
+    chat("Chat: érezhető volt.");
+    spawnEmoji("😡");
+}
+
+function spawnEmoji(e) {
+    const el = document.createElement("div");
+    el.className = "emoji";
+    el.innerText = e;
+    el.style.left = Math.random()*100 + "vw";
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),4000);
+}
+
+setInterval(()=>{
+    const line = chatLines[Math.floor(Math.random()*chatLines.length)];
+    chat(line);
+}, 3000);
+
+setInterval(()=>{
+    spawnEmoji(["💸","🔥","😂","🍺","🎰"][Math.floor(Math.random()*5)]);
+}, 2000);
+</script>
+
+</body>
+</html>
